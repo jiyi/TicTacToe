@@ -1,6 +1,8 @@
 package com.example.tictactoe;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,12 +31,16 @@ public class MainActivity extends Activity {
 	Boolean mGameOver;
 
 	int winner;
-	
+
+	private TextView mCountTextView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(
+				"MyPref", MODE_PRIVATE);
+		// Editor editor = pref.edit();
 		mGame = new TicTacToeGame();
 
 		mBoardButtons = new Button[TicTacToeGame.BOARD_SIZE];
@@ -48,6 +54,16 @@ public class MainActivity extends Activity {
 		mBoardButtons[7] = (Button) findViewById(R.id.eight);
 		mBoardButtons[8] = (Button) findViewById(R.id.nine);
 		mInfoTextView = (TextView) findViewById(R.id.information);
+		mCountTextView = (TextView) findViewById(R.id.count_infomation);
+
+		// for count
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(pref.getInt("win", 0) + "  ");
+		builder.append(pref.getInt("lose", 0) + "  ");
+		builder.append(pref.getInt("tie", 0));
+		mCountTextView.setText(getString(R.string.your_count) + "\n"
+				+ builder.toString());
 
 		if (savedInstanceState != null) {
 			mGameOver = savedInstanceState.getBoolean(KEY_GAMEOVER);
@@ -57,7 +73,8 @@ public class MainActivity extends Activity {
 			}
 			winner = savedInstanceState.getInt(KEY_WINNER);
 			setInfoTextView(winner);
-			mInfoTextView.setText(savedInstanceState.getString(KEY_INFO_TEXT_VIEW));
+			mInfoTextView.setText(savedInstanceState
+					.getString(KEY_INFO_TEXT_VIEW));
 		} else {
 			startNewGame();
 		}
@@ -65,6 +82,8 @@ public class MainActivity extends Activity {
 
 	// --- Set up the game board.
 	private void startNewGame() {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(
+				"MyPref", MODE_PRIVATE);
 		mGameOver = false;
 		mGame.clearBoard();
 		// ---Reset all buttons
@@ -73,8 +92,16 @@ public class MainActivity extends Activity {
 			mBoardButtons[i].setEnabled(true);
 			mBoardButtons[i].setOnClickListener(new ButtonClickListener(i));
 		}
-		// ---Human goes first
-		mInfoTextView.setText(R.string.You_go_first);
+		
+		if ((pref.getInt("win", 0) + pref.getInt("lose", 0) + pref.getInt(
+				"tie", 0)) % 2 == 0) {
+			// ---Human goes first
+			mInfoTextView.setText(R.string.You_go_first);
+		} else {
+			mInfoTextView.setText(R.string.android_go_first);
+			int move = mGame.getComputerMove();
+			setMove(TicTacToeGame.COMPUTER_PLAYER, move);
+		}
 	}
 
 	private void setInfoTextView(int winner) {
@@ -95,10 +122,13 @@ public class MainActivity extends Activity {
 			mGameOver = true;
 		}
 	}
-	
+
 	// ---Handles clicks on the game board buttons
 	private class ButtonClickListener implements View.OnClickListener {
 		int location;
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(
+				"MyPref", MODE_PRIVATE);
+		Editor editor = pref.edit();
 
 		public ButtonClickListener(int location) {
 			this.location = location;
@@ -120,6 +150,22 @@ public class MainActivity extends Activity {
 						winner = mGame.checkForWinner();
 					}
 					setInfoTextView(winner);
+					if (winner == 1) {
+						editor.putInt("tie", pref.getInt("tie", 0) + 1);
+						editor.commit();
+					} else if (winner == 2) {
+						editor.putInt("win", pref.getInt("win", 0) + 1);
+						editor.commit();
+					} else if (winner == 3) {
+						editor.putInt("lose", pref.getInt("lose", 0) + 1);
+						editor.commit();
+					}
+					StringBuilder builder = new StringBuilder();
+					builder.append(pref.getInt("win", 0) + "  ");
+					builder.append(pref.getInt("lose", 0) + "  ");
+					builder.append(pref.getInt("tie", 0));
+					mCountTextView.setText(getString(R.string.your_count)
+							+ "\n" + builder.toString());
 				}
 			}
 		}
@@ -137,7 +183,8 @@ public class MainActivity extends Activity {
 		} else {
 			mBoardButtons[location].setText("");
 			mBoardButtons[location].setEnabled(true);
-			mBoardButtons[location].setOnClickListener(new ButtonClickListener(location));
+			mBoardButtons[location].setOnClickListener(new ButtonClickListener(
+					location));
 		}
 	}
 
@@ -151,7 +198,8 @@ public class MainActivity extends Activity {
 		super.onSaveInstanceState(outState);
 		outState.putCharArray(KEY_BOARD, mGame.getBoard());
 		outState.putBoolean(KEY_GAMEOVER, mGameOver);
-		outState.putString(KEY_INFO_TEXT_VIEW, mInfoTextView.getText().toString());
+		outState.putString(KEY_INFO_TEXT_VIEW, mInfoTextView.getText()
+				.toString());
 		outState.putInt(KEY_WINNER, winner);
 	}
 

@@ -36,7 +36,7 @@ public class TicTacToeGame {
 			mBoard[i] = OPEN_SPOT;
 		}
 	}
-	
+
 	public char[] getBoard() {
 		return mBoard;
 	}
@@ -45,7 +45,7 @@ public class TicTacToeGame {
 	public void setMove(char player, int location) {
 		mBoard[location] = player;
 	}
-	
+
 	/**
 	 * Return the best move for the computer to make. You must call setMove() to
 	 * actually make the computer move to that location.

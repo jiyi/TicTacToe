@@ -14,5 +14,7 @@
     <string name="Play_Audio">播放背景音乐</string>
     <string name="Stop_Video">关闭视频</string>
     <string name="Play_Video">播放视频</string>
+    <string name="your_count">你的胜、败、平的记录为：</string>
+    <string name="android_go_first">Android 先走</string>
 
 </resources>

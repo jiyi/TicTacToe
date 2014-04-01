@@ -14,5 +14,7 @@
     <string name="Play_Audio">Play Background Music</string>
     <string name="Stop_Video">Stop Video</string>
     <string name="Play_Video">Play Video</string>
+    <string name="your_count">Win, lose and tie</string>
+    <string name="android_go_first">Android go first.</string>
 
 </resources>
