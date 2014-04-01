@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">井字棋</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="You_go_first">你先走</string>
+    <string name="your_turn">该你走了(X).</string>
+    <string name="tie">平局</string>
+    <string name="you_won">你赢了！</string>
+    <string name="android_won">安卓赢了！</string>
+    <string name="restart">开始新游戏</string>
+    <string name="Stop_Audio">关闭背景音乐</string>
+    <string name="Play_Audio">播放背景音乐</string>
+    <string name="Stop_Video">关闭视频</string>
+    <string name="Play_Video">播放视频</string>
+
+</resources>
