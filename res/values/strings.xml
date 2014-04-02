@@ -10,11 +10,17 @@
     <string name="you_won">You won!</string>
     <string name="android_won">Android won!</string>
     <string name="restart">Start a New Game</string>
-    <string name="Stop_Audio">Stop Background Music</string>
-    <string name="Play_Audio">Play Background Music</string>
-    <string name="Stop_Video">Stop Video</string>
-    <string name="Play_Video">Play Video</string>
     <string name="your_count">Win, lose and tie</string>
     <string name="android_go_first">Android go first.</string>
+    <string name="exit">Quit</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="dialog_set_difficulty">Set Difficulty</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string-array name="difficulty_array">
+        <item >Normal</item>
+        <item >Easy</item>
+        <item >Very easy</item>
+    </string-array>
 
 </resources>

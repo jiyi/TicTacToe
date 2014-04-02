@@ -10,11 +10,18 @@
     <string name="you_won">你赢了！</string>
     <string name="android_won">安卓赢了！</string>
     <string name="restart">开始新游戏</string>
-    <string name="Stop_Audio">关闭背景音乐</string>
-    <string name="Play_Audio">播放背景音乐</string>
-    <string name="Stop_Video">关闭视频</string>
-    <string name="Play_Video">播放视频</string>
     <string name="your_count">你的胜、败、平的记录为：</string>
     <string name="android_go_first">Android 先走</string>
+    <string name="exit">退出</string>
+    <string name="difficulty">难度</string>
+    <string name="dialog_set_difficulty">选择难度</string>
+    <string name="ok">设置</string>
+    <string name="cancel">取消</string>
+
+    <string-array name="difficulty_array">
+        <item>普通</item>
+        <item>简单</item>
+        <item>很简单</item>
+    </string-array>
 
 </resources>

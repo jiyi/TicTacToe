@@ -1,11 +1,14 @@
 package com.example.tictactoe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,11 +31,13 @@ public class MainActivity extends Activity {
 	private TextView mInfoTextView;
 
 	// Game Over
-	Boolean mGameOver;
+	private Boolean mGameOver;
 
-	int winner;
+	private int winner;
 
 	private TextView mCountTextView;
+
+	private int difficulty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		SharedPreferences pref = getApplicationContext().getSharedPreferences(
 				"MyPref", MODE_PRIVATE);
-		// Editor editor = pref.edit();
+
+		difficulty = 0;
 		mGame = new TicTacToeGame();
 
 		mBoardButtons = new Button[TicTacToeGame.BOARD_SIZE];
@@ -86,13 +92,14 @@ public class MainActivity extends Activity {
 				"MyPref", MODE_PRIVATE);
 		mGameOver = false;
 		mGame.clearBoard();
+		mGame.setDifficulty(difficulty);
 		// ---Reset all buttons
 		for (int i = 0; i < mBoardButtons.length; i++) {
 			mBoardButtons[i].setText("");
 			mBoardButtons[i].setEnabled(true);
 			mBoardButtons[i].setOnClickListener(new ButtonClickListener(i));
 		}
-		
+
 		if ((pref.getInt("win", 0) + pref.getInt("lose", 0) + pref.getInt(
 				"tie", 0)) % 2 == 0) {
 			// ---Human goes first
@@ -121,6 +128,10 @@ public class MainActivity extends Activity {
 			mInfoTextView.setText(R.string.android_won);
 			mGameOver = true;
 		}
+	}
+
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
 	}
 
 	// ---Handles clicks on the game board buttons
@@ -208,5 +219,53 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.menu_item_difficulty:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.dialog_set_difficulty)
+					.setSingleChoiceItems(R.array.difficulty_array,
+							mGame.getDifficulty(),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									difficulty = which;
+								}
+							})
+					.setPositiveButton(R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									startNewGame();
+								}
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									difficulty = mGame.getDifficulty();
+								}
+							})
+					.setOnCancelListener(
+							new DialogInterface.OnCancelListener() {
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									difficulty = mGame.getDifficulty();
+								}
+							});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			return true;
+		case R.id.menu_item_exit:
+			finish();
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
 	}
 }

@@ -24,6 +24,8 @@ public class TicTacToeGame {
 	 */
 	private Random mRand;
 
+	private int difficulty = 0;
+
 	public TicTacToeGame() {
 
 		// Seed the random number generator
@@ -41,6 +43,13 @@ public class TicTacToeGame {
 		return mBoard;
 	}
 
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+	}
+	public int getDifficulty() {
+		return difficulty;
+	}
+
 	/** Set the given player at the given location on the game board * */
 	public void setMove(char player, int location) {
 		mBoard[location] = player;
@@ -54,29 +63,33 @@ public class TicTacToeGame {
 	 */
 	public int getComputerMove() {
 		int move;
-		// First see if there's a move O can make to win
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			if (mBoard[i] != HUMAN_PLAYER && mBoard[i] != COMPUTER_PLAYER) {
-				char curr = mBoard[i];
-				mBoard[i] = COMPUTER_PLAYER;
-				if (checkForWinner() == 3) {
-					System.out.println("Computer is moving to " + (i + 1));
-					return i;
-				} else
-					mBoard[i] = curr;
+		if (difficulty < 2) {
+			// First see if there's a move O can make to win
+			for (int i = 0; i < BOARD_SIZE; i++) {
+				if (mBoard[i] != HUMAN_PLAYER && mBoard[i] != COMPUTER_PLAYER) {
+					char curr = mBoard[i];
+					mBoard[i] = COMPUTER_PLAYER;
+					if (checkForWinner() == 3) {
+						System.out.println("Computer is moving to " + (i + 1));
+						return i;
+					} else
+						mBoard[i] = curr;
+				}
 			}
 		}
-		// See if there's a move O can make to block X from winning
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			if (mBoard[i] != HUMAN_PLAYER && mBoard[i] != COMPUTER_PLAYER) {
-				char curr = mBoard[i]; // Save the current number
-				mBoard[i] = HUMAN_PLAYER;
-				if (checkForWinner() == 2) {
-					mBoard[i] = COMPUTER_PLAYER;
-					System.out.println("Computer is moving to " + (i + 1));
-					return i;
-				} else
-					mBoard[i] = curr;
+		if (difficulty < 1) {
+			// See if there's a move O can make to block X from winning
+			for (int i = 0; i < BOARD_SIZE; i++) {
+				if (mBoard[i] != HUMAN_PLAYER && mBoard[i] != COMPUTER_PLAYER) {
+					char curr = mBoard[i]; // Save the current number
+					mBoard[i] = HUMAN_PLAYER;
+					if (checkForWinner() == 2) {
+						mBoard[i] = COMPUTER_PLAYER;
+						System.out.println("Computer is moving to " + (i + 1));
+						return i;
+					} else
+						mBoard[i] = curr;
+				}
 			}
 		}
 		// Generate random move
