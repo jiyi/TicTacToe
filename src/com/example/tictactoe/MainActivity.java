@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.media.AsyncPlayer;
+import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +42,8 @@ public class MainActivity extends Activity {
 
 	private int difficulty;
 
+	private AsyncPlayer audioPlayer;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +53,8 @@ public class MainActivity extends Activity {
 
 		difficulty = 0;
 		mGame = new TicTacToeGame();
+
+		audioPlayer = new AsyncPlayer(getPackageName());
 
 		mBoardButtons = new Button[TicTacToeGame.BOARD_SIZE];
 		mBoardButtons[0] = (Button) findViewById(R.id.one);
@@ -112,6 +119,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void setInfoTextView(int winner) {
+
 		if (winner == 0) {
 			mInfoTextView.setTextColor(Color.rgb(0, 0, 0));
 			mInfoTextView.setText(R.string.your_turn);
@@ -128,6 +136,11 @@ public class MainActivity extends Activity {
 			mInfoTextView.setText(R.string.android_won);
 			mGameOver = true;
 		}
+		// TODO
+		/*
+		 * AlphaAnimation alp = new AlphaAnimation(1.0f,0.0f);
+		 * alp.setDuration(4000); mInfoTextView.setAnimation(alp);
+		 */
 	}
 
 	public void setDifficulty(int difficulty) {
@@ -149,6 +162,10 @@ public class MainActivity extends Activity {
 		public void onClick(View v) {
 
 			if (mGameOver == false) {
+				Uri uri = Uri.parse("android.resource://" + getPackageName()
+						+ "/" + R.raw.tick);
+				audioPlayer.play(MainActivity.this, uri, false,
+						AudioManager.STREAM_MUSIC);
 
 				if (mBoardButtons[location].isEnabled()) {
 					setMove(TicTacToeGame.HUMAN_PLAYER, location);
@@ -177,12 +194,24 @@ public class MainActivity extends Activity {
 					builder.append(pref.getInt("tie", 0));
 					mCountTextView.setText(getString(R.string.your_count)
 							+ "\n" + builder.toString());
+
+					// TODO
+					/*
+					 * AlphaAnimation alp = new AlphaAnimation(1.0f,0.0f);
+					 * alp.setDuration(4000); mInfoTextView.setAnimation(alp);
+					 * 
+					 * 
+					 * Animation mAnimationRight = AnimationUtils.loadAnimation(
+					 * MainActivity.this, R.animator.alpha);
+					 * mCountTextView.setAnimation(mAnimationRight);
+					 */
 				}
 			}
 		}
 	}
 
 	private void setMove(char player, int location) {
+
 		mGame.setMove(player, location);
 		if (player != TicTacToeGame.OPEN_SPOT) {
 			mBoardButtons[location].setEnabled(false);

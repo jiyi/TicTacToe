@@ -17,10 +17,11 @@
     <string name="dialog_set_difficulty">Set Difficulty</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+
     <string-array name="difficulty_array">
-        <item >Normal</item>
-        <item >Easy</item>
-        <item >Very easy</item>
+        <item>Normal</item>
+        <item>Easy</item>
+        <item>Very easy</item>
     </string-array>
 
 </resources>
